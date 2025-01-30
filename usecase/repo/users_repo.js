@@ -1,6 +1,10 @@
 const pool = require('../../config/db.js'); 
-const User = require('../../entity/user.js'); 
 
+module.exports = {
+    createUserSql,
+    getByEmail,
+    alreadyExists 
+};
 
 async function createUserSql(user) {
     try {
@@ -12,10 +16,47 @@ async function createUserSql(user) {
 
         
         const result = await pool.query(query, values);
-        console.log('Пользователь добавлен:', result.rowCount); 
+        if (result.rowCount > 0) {
+           return true 
+        } else {
+            return false; 
+        }
     } catch (error) {
-        console.error('Ошибка при добавлении пользователя:', error);
+        console.error('Error adding user:', error);
+        throw error
     }
 }
 
-module.exports = createUserSql;
+async function getByEmail(email) {
+   
+    try {
+        const query = `SELECT email,password_hash FROM userlist WHERE email = $1;`;
+        const result = await pool.query(query, [email]);
+       
+
+        if (result.rowCount > 0) {
+            return result.rows[0].password_hash;
+        } else {
+            return null; 
+        }
+    } catch(error) {
+        throw error 
+    }
+}
+
+async function alreadyExists(email) {
+    try {
+        const query = `SELECT email,password_hash FROM userlist WHERE email = $1;`;
+        const result = await pool.query(query, [email]);
+       
+
+        if (result.rowCount > 0) {
+            return false;
+        } else {
+            return true; 
+        }
+    } catch(error) {
+        throw error 
+    }
+}
+
