@@ -17,8 +17,8 @@ async function registerUserController(call, callback) {
         password
     );
     try {
-        await createUser(user)
-        callback(null, { message: 'User successfully created' });
+        await createUser(user);
+        callback(null, { success: true });
     } catch(error){
         callback({
             code: grpc.status.INTERNAL,
@@ -40,7 +40,7 @@ async function loginUserController(call, callback) {
 
     try {
         await loginUser(user)
-        callback(null, { message: 'User successfully logged in!' });
+        callback(null, { success: true });
     } catch(error) {
         callback({
             code: grpc.status.INTERNAL,

@@ -1,10 +1,10 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const path = require('path');
-const User = require('../entity/user.js');
+
 const {registerUserController, loginUserController} = require('../controller/users.js')
 
-const PROTO_PATH = '/Users/stepansalikov/CryptoManager/Users/proto/user.proto'
+const PROTO_PATH = '/Users/stepansalikov/CryptoManager/Users/proto/user.proto';
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -13,7 +13,6 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   oneofs: true,
 });
 const usersProto = grpc.loadPackageDefinition(packageDefinition).usersproto;
-
 
 function main() {
   const server = new grpc.Server();
